@@ -1,0 +1,24 @@
+input {
+ lumberjack {
+  port => "5043"
+  ssl_certificate => "/tmp/lumberjack.crt"
+  ssl_key => "/tmp/lumberjack.key"
+  codec => json {
+    charset => "UTF-8"
+  }
+ }
+}
+
+filter {
+  multiline {
+    pattern => "(^.+Exception: .+)|(^\s+at .+)|(^\s+... \d+ more)|(^\s*Caused by:.+)"
+    what => "previous"
+  }
+}
+
+output {
+  elasticsearch {
+    protocol => "http"
+    host => "elasticsearch"
+  }
+}

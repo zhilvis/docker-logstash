@@ -10,8 +10,12 @@ input {
 }
 
 filter {
-  multiline {
-    pattern => "(^.+Exception: .+)|(^\s+at .+)|(^\s+... \d+ more)|(^\s*Caused by:.+)"
+  mutate{
+    #most filters expect that there will be a message field, not log
+    rename => {"log" => "message"}
+  }
+  multiline{
+    pattern => "(^.+Exception: .+)|(^!?\s+at .+)|(^!?\s+... \d+ more)|(^!?\s*Caused by:.+)"
     what => "previous"
   }
 }

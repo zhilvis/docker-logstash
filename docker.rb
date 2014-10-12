@@ -15,8 +15,13 @@ class LogStash::Filters::Docker < LogStash::Filters::Base
   con = Excon.new("unix:///", {:socket => "/var/run/docker.sock"})
   containers = JSON.load(con.get(:path => "/v1.14/containers/json?all=1").body)
   id = event["file"].split('/').last(2).first
-  image_name = containers.at(containers.index{|b| b["Id"] == id})["Names"].at(0)
-  event["container"] = image_name
+  container = containers.index{|b| b["Id"] == id}
+  if container
+    image_name = containers.at(container)["Names"].at(0)
+    event["container"] = image_name
+  else
+    event["container"] = "unknown"
+  end
   filter_matched(event)
  end
 end

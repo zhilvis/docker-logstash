@@ -10,6 +10,7 @@ input {
 }
 
 filter {
+  docker {}
   mutate{
     #most filters expect that there will be a message field, not log
     rename => {"log" => "message"}

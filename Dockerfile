@@ -7,6 +7,7 @@ RUN /opt/logstash-1.4.2/bin/plugin install contrib
 
 ADD config.json /tmp/
 ADD ssl /tmp/
+ADD docker.rb /opt/logstash-1.4.2/lib/logstash/filters/
 
 EXPOSE 9292 5043
 
